@@ -1,0 +1,11 @@
+# - name: Uninstall Helm
+#   file:
+#     state: absent
+#     path: "{{ k8s_base_helm_install_dir }}/helm"
+#   ignore_errors: yes
+
+  
+- name: Uninstall Kubernetes
+  package:
+    name: "{{ k8s_base_packages }}"
+    state: absent

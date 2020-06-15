@@ -1,0 +1,40 @@
+- name: Stop and disable kubelet
+  service:
+    name: kubelet
+    state: stopped
+    enabled: no
+  ignore_errors: yes
+
+
+- name: Stop remaining services
+  shell: >
+    pkill -f kube-controller-manager
+  ignore_errors: yes
+
+
+- name: Revert Kubernetes configuration
+  shell: >
+    kubeadm reset -f
+  ignore_errors: yes
+
+
+- name: Remove kubeconfig
+  file:
+    path: "{{ k8s_base_kubeconfig }}"
+    state: absent
+  ignore_errors: yes
+
+
+- name: Purge IPTables rules
+  shell: >
+    iptables -F && iptables -t nat -F && iptables -t mangle -F && iptables -X
+  ignore_errors: yes
+
+
+- name: Cleanup tampered hosts file
+  lineinfile:
+    path: /etc/hosts
+    regexp: '^.*{{ k8s_base_control_plane_endpoint }}'
+    state: absent
+  when:
+    - k8s_base_control_plane_endpoint is defined and k8s_base_control_plane_endpoint | length > 0
