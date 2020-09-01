@@ -1,12 +1,4 @@
-# - block:
-#     - name: Check Helm installation status
-#       stat:
-#         path: "{{ k8s_base_helm_bin }}"
-#       register: _helm_bin
-#     # ---
-#     - name: Set Helm installation status
-#       set_fact:
-#         k8s_base_helm_exists: "{{ _helm_bin.stat.exists | bool }}"
+# code: language=Ansible insertSpaces=true tabSize=2
 
 
 - block:

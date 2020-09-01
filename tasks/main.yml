@@ -1,3 +1,5 @@
+# code: language=Ansible insertSpaces=true tabSize=2
+
 # Reset cluster
 #
 # This task is placed at top in order to bypass all assertions and avoid
@@ -6,8 +8,7 @@
   include_tasks:
     file: teardown.yml
     apply: { tags: [ teardown ] }
-  tags:
-    - teardown
+  tags: [never, teardown]
 
 
 # Remove Kubernetes
@@ -18,8 +19,7 @@
   include_tasks:
     file: remove.yml
     apply: { tags: [ remove ] }
-  tags:
-    - remove
+  tags: [never, remove]
 
 
 # Assertions
@@ -30,8 +30,7 @@
   include_tasks:
     file: assert.yml
     apply: { tags: [ setup ] }
-  tags:
-    - setup
+  tags: [never, setup]
 
 
 # Facts collection
@@ -41,8 +40,7 @@
   include_tasks:
     file: facts.yml
     apply: { tags: [ setup ] }
-  tags:
-    - setup
+  tags: [never, setup]
 
 
 # Installation
@@ -53,8 +51,7 @@
   include_tasks:
     file: install.yml
     apply: { tags: [ setup ] }
-  tags:
-    - setup
+  tags: [never, setup]
 
 
 # Prepare kubeconfig
@@ -77,8 +74,7 @@
     # ---
   when:
     - k8s_base_node_type == "master"
-  tags:
-    - setup
+  tags: [never, setup]
 
 
 # Deploy cluster
@@ -88,8 +84,7 @@
   include_tasks:
     file: cluster.yml
     apply: { tags: [ setup ] }
-  tags:
-    - setup
+  tags: [never, setup]
 
 
 # Facts collection
@@ -99,6 +94,4 @@
   include_tasks:
     file: facts.yml
     apply: { tags: [ always, stats ] }
-  tags:
-    - always
-    - stats
+  tags: [never, stats, setup, teardown, remove]

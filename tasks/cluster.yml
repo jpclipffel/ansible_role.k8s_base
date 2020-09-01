@@ -1,17 +1,21 @@
+# code: language=Ansible insertSpaces=true tabSize=2
+
+
 # Swap configuration
 #
 # By default, Kubernetes refuses to start when swapping is enabled.
 # Disable swap partition and usage.
+
+- name: Disable swap
+  shell: >
+    swapoff -a
+
+
 - name: Unmount swap
   mount:
     name: swap
     fstype: swap
     state: absent
-
-
-- name: Disable swap
-  shell: >
-    swapoff -a
 
 
 
@@ -96,10 +100,12 @@
     - name: Initialize cluster
       shell: >
         kubeadm init
+        --apiserver-advertise-address "{{ k8s_base_apiserver_advertise_address }}"
+        --apiserver-bind-port "{{ k8s_base_apiserver_bind_port }}"
         --upload-certs
         --control-plane-endpoint "{{ k8s_base_control_plane_endpoint }}"
-        --pod-network-cidr="{{ k8s_base_pod_network_cidr }}"
-        --service-cidr="{{ k8s_base_service_cidr }}"
+        --pod-network-cidr "{{ k8s_base_pod_network_cidr }}"
+        --service-cidr "{{ k8s_base_service_cidr }}"
 
     - name: Replace KCM with Hyperkube
       replace:
@@ -107,7 +113,7 @@
         regexp: '(?P<begin>^\s*image:\s+)(?P<url>[^:]+):(?P<tag>)(?P<rest>.*)'
         replace: '\g<begin>{{ k8s_base_flavor_hyperkube_url }}:\g<tag>\g<rest>'
       when:
-        - k8s_base_flavor == "hyperkube"
+        - k8s_base_flavor | default('') == "hyperkube"
 
     - name: Replace Hyperkube with KCM
       replace:
@@ -115,7 +121,7 @@
         regexp: '(?P<begin>^\s*image:\s+)(?P<url>[^:]+):(?P<tag>)(?P<rest>.*)'
         replace: '\g<begin>{{ k8s_base_flavor_kcm_url }}:\g<tag>\g<rest>'
       when:
-        - k8s_base_flavor == "kcm"
+        - k8s_base_flavor | default('') == "kcm"
 
     - name: Update kubeconfig
       copy:

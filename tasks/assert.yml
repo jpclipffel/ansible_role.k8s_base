@@ -1,9 +1,12 @@
+# code: language=Ansible insertSpaces=true tabSize=2
+
 - assert:
     that: "{{ item }} is defined and {{ item }} | length > 0"
     fail_msg: "Undefined or empty variable '{{ item }}'"
   with_items:
     - k8s_base_node_type
     - k8s_base_control_plane_endpoint
+
 
 - name: Check node type
   assert:

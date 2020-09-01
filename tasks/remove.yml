@@ -1,10 +1,6 @@
-# - name: Uninstall Helm
-#   file:
-#     state: absent
-#     path: "{{ k8s_base_helm_install_dir }}/helm"
-#   ignore_errors: yes
+# code: language=Ansible insertSpaces=true tabSize=2
 
-  
+
 - name: Uninstall Kubernetes
   package:
     name: "{{ k8s_base_packages }}"
