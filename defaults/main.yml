@@ -1,31 +1,33 @@
-# --- Kubernetes packages ---
+# code: language=Ansible insertSpaces=true tabSize=2
+
+
+# Kubernetes packages
 k8s_base_version: "1.17.3-00"
 k8s_base_packages:
   - "kubeadm={{ k8s_base_version }}"
   - "kubectl={{ k8s_base_version }}"
   - "kubelet={{ k8s_base_version }}"
-  - ceph-common
-k8s_base_flavor: "hyperkube"
+
+# Kubernetes control manager flavor and URLS/
+# Possible values are:
+# - "" (empty string) : Default
+# - "kcm"             : Force Kube Control Manager images
+# - "hyperkube"       : Force Google's Hyperkube images
+k8s_base_flavor: "" # "kcm" || 'hyperkube'
 k8s_base_flavor_kcm_url: 'k8s.gcr.io/kube-controller-manager'
 k8s_base_flavor_hyperkube_url: 'gcr.io/google_containers/hyperkube'
 
-# --- Misc ---
+# Healthchek URL
 k8s_base_health_url: "http://localhost:10248/healthz"
 
-# --- kubeconfig ---
+# kubeconfig
 k8s_base_kubeconfig_default: /etc/kubernetes/admin.conf
 k8s_base_kubeconfig: "{{ansible_env.HOME }}/.kube/config"
 
-# --- Kubernetes ---
+# kubeadm variables
+k8s_base_apiserver_advertise_address: "0.0.0.0"
+k8s_base_apiserver_bind_port: 6443
 k8s_base_control_plane_endpoint: ""
 k8s_base_pod_network_cidr: "10.128.0.0/14"
 k8s_base_service_cidr: "10.54.0.0/16"
 k8s_base_token_ttl: 15m
-
-# --- Helm ---
-# k8s_base_helm_install_dir: /usr/local/sbin
-# k8s_base_helm_bin: "{{ k8s_base_helm_install_dir }}/helm"
-# k8s_base_helm_package_vrs: "3.0.3"
-# k8s_base_helm_package_dis: linux-amd64
-# k8s_base_helm_package_src: "helm-v{{ k8s_base_helm_package_vrs }}-{{ k8s_base_helm_package_dis }}.tar.gz"
-# k8s_base_helm_package_url: "https://get.helm.sh/{{ k8s_base_helm_package_src }}"
