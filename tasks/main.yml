@@ -95,3 +95,17 @@
     file: facts.yml
     apply: { tags: [ always, stats ] }
   tags: [never, stats, setup, teardown, remove]
+
+
+# Print facts
+- name: Print facts
+  debug:
+    var: "{{ item }}"
+  with_items:
+    - k8s_base_helm_exists
+    - k8s_base_kubelet_running
+    - k8s_base_kubelet_healthy
+    - k8s_base_cluster_running
+    - k8s_base_kubeadm_version_major
+    - k8s_base_kubeadm_version_minor  
+  tags: [never, stats]

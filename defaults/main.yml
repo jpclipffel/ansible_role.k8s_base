@@ -2,7 +2,7 @@
 
 
 # Kubernetes packages
-k8s_base_version: "1.17.3-00"
+k8s_base_version: "1.20.1-00"
 k8s_base_packages:
   - "kubeadm={{ k8s_base_version }}"
   - "kubectl={{ k8s_base_version }}"

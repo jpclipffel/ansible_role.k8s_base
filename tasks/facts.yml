@@ -3,6 +3,23 @@
 
 - block:
     # ---
+    - name: Check kubeadm version
+      shell: >
+        kubeadm version -o yaml 2>/dev/null || echo '{}'
+      register: _k8s_base_kubeadm_version
+    # ---
+    - name: Set kubeadm version
+      set_fact:
+        k8s_base_kubeadm_version: "{{ _k8s_base_kubeadm_version.stdout | from_yaml }}"
+    # ---
+    - name: Set kubeadm version major and minor
+      set_fact:
+        k8s_base_kubeadm_version_major: "{{ k8s_base_kubeadm_version.clientVersion.major | default(0) | int }}"
+        k8s_base_kubeadm_version_minor: "{{ k8s_base_kubeadm_version.clientVersion.minor | default(0) | int }}"
+
+
+- block:
+    # ---
     - name: Check node service status
       service_facts:
     # ---
@@ -73,5 +90,7 @@
       k8s_base_kubelet_running: "{{ k8s_base_kubelet_running | default(false) }}"
       k8s_base_kubelet_healthy: "{{ k8s_base_kubelet_healthy | default(false) }}"
       k8s_base_cluster_running: "{{ k8s_base_cluster_running | default(false) }}"
+      k8s_base_kubeadm_version_major: "{{ k8s_base_kubeadm_version_major | default(0) }}"
+      k8s_base_kubeadm_version_minor: "{{ k8s_base_kubeadm_version_minor | default(0) }}"
   # delegate_to: localhost
   # run_once: yes
