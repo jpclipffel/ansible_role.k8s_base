@@ -1,4 +1,4 @@
-# code: language=Ansible insertSpaces=true tabSize=2
+# code: language="jinja-yaml" insertSpaces=true tabSize=2
 
 
 # Swap configuration
@@ -176,7 +176,7 @@
 
     - name: Join master node to cluster
       shell: |
-        {% if 'force' in ansible_run_tags %}kubeadm reset -f{% endif %}
+        {% if 'force' in ansible_run_tags %}kubeadm reset -f && {% endif %}
         {{ hostvars[primary_master_name].k8s_base_join_command.stdout  }} --control-plane --certificate-key {{ hostvars[primary_master_name].k8s_base_certificate_key.stdout }}
 
     - name: Replace KCM with Hyperkube
@@ -226,7 +226,7 @@
 
 - name: Join worker node to cluster
   shell: |
-    {% if 'force' in ansible_run_tags %}kubeadm reset -f{% endif %}
+    {% if 'force' in ansible_run_tags %}kubeadm reset -f && {% endif %}
     {{ hostvars[primary_master_name].k8s_base_join_command.stdout }}
   when:
     - k8s_base_node_type == "worker"
