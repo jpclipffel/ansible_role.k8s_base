@@ -1,4 +1,4 @@
-# code: language=Ansible insertSpaces=true tabSize=2
+# code: language="jinja-yaml" insertSpaces=true tabSize=2
 
 
 - block:
@@ -86,7 +86,7 @@
     per_host: yes
     aggregate: yes
     data:
-      k8s_base_helm_exists: "{{ k8s_base_helm_exists | default(false) }}"
+      # k8s_base_helm_exists: "{{ k8s_base_helm_exists | default(false) }}"
       k8s_base_kubelet_running: "{{ k8s_base_kubelet_running | default(false) }}"
       k8s_base_kubelet_healthy: "{{ k8s_base_kubelet_healthy | default(false) }}"
       k8s_base_cluster_running: "{{ k8s_base_cluster_running | default(false) }}"
