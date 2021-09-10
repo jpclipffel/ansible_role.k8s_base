@@ -45,7 +45,7 @@
 
 # Installation
 #
-# Install Kubernetes, its requirements, Helm and Ansible's Python packages needed
+# Install Kubernetes and Python dependencies API binding
 # to operate the cluster.
 - name: Installation
   include_tasks:
@@ -107,5 +107,5 @@
     - k8s_base_kubelet_healthy
     - k8s_base_cluster_running
     - k8s_base_kubeadm_version_major
-    - k8s_base_kubeadm_version_minor  
+    - k8s_base_kubeadm_version_minor
   tags: [never, stats]
